@@ -1,6 +1,7 @@
 import classes.Person;
 import classes.Validaciones;
 import exceptions.ExceptionValidateAccount;
+import service.ProductService;
 
 import java.io.*;
 
@@ -10,12 +11,17 @@ public class Main {
 
         String rute = "db/Person.txt";
 
+        String ruteProducts = "db/Products.txt";
+
         BufferedReader readerFile = new BufferedReader(new FileReader(rute));
 
-        menulogin(reader, rute, readerFile);
+        BufferedReader readerProducts = new BufferedReader(new FileReader(ruteProducts));
+
+        menulogin(reader, rute, readerFile, readerProducts, ruteProducts);
     }
 
-    public static void menulogin(BufferedReader reader, String rute, BufferedReader readerFile) throws IOException {
+    public static void menulogin(BufferedReader reader, String rute, BufferedReader readerFile, BufferedReader readerProducts, String ruteProducts) throws IOException {
+        ProductService productService = new ProductService();
         boolean exit = false;
         while (!exit) {
             try {
@@ -28,7 +34,7 @@ public class Main {
                 switch (option) {
                     case 1:
                         try (BufferedWriter writer = new BufferedWriter(new FileWriter(rute, true))) {
-                            int lastId = getLastId(rute);
+                            int lastId = productService.getLastId(rute);
 
                             Person person = new Person();
                             Validaciones validaciones = new Validaciones();
@@ -62,7 +68,7 @@ public class Main {
 
                             writer.write(person + System.lineSeparator());
                             writer.close();
-                            details(rute);
+                            productService.details(rute);
                         } catch (IOException e) {
                             System.out.println("\nError reading file");
                         } catch (NumberFormatException e) {
@@ -90,7 +96,7 @@ public class Main {
                             }
                         }
                         if (login) {
-                            menuMajor(reader, rute);
+                            menuMajor(reader, ruteProducts, readerProducts);
                         } else {
                             System.out.println("\nThe mail or password are invalids");
                         }
@@ -108,50 +114,33 @@ public class Main {
         }
     }
 
-    public static int getLastId(String rute) throws IOException {
-        int lastId = 0;
-        BufferedReader reader = new BufferedReader(new FileReader(rute));
-        String line;
-        while ((line = reader.readLine()) != null) {
-            String[] data = line.split(",");
-            lastId = Integer.parseInt(data[5]);
-        }
-        reader.close();
-        return lastId;
-    }
-
-    public static void details(String rute) throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader(rute));
-        String line;
-        System.out.println("The file has:");
-        while ((line = reader.readLine()) != null) {
-            System.out.println(line);
-        }
-        reader.close();
-    }
-
-    public static void menuMajor(BufferedReader reader, String rute) throws IOException {
+    public static void menuMajor(BufferedReader reader, String ruteProducts, BufferedReader readerProducts) throws IOException {
         boolean exit = false;
         while (!exit) {
             try {
                 System.out.println("\nWELCOME!!");
                 System.out.println("\nMUSICOLET MENU");
                 System.out.println("1. Add product");
-                System.out.println("2. Search product");
+                System.out.println("2. Edit product");
                 System.out.println("3. Delete product");
                 System.out.println("4. List of products");
                 System.out.println("5. Exit");
                 System.out.println("Enter the option:");
                 int option = Integer.parseInt(reader.readLine());
 
+                ProductService productService = new ProductService();
                 switch (option) {
                     case 1:
+                        productService.addProduct(reader, ruteProducts);
                         break;
                     case 2:
+                        productService.editProduct(reader, readerProducts, ruteProducts);
                         break;
                     case 3:
+                        productService.deletedProduct(reader, readerProducts, ruteProducts);
                         break;
                     case 4:
+                        productService.listProductDeleted(ruteProducts);
                         break;
                     case 5:
                         System.out.println("Bye..");

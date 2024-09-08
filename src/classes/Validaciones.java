@@ -21,7 +21,7 @@ public class Validaciones {
     }
 
     public void validatePhone(String phoneInput) throws ExceptionValidateAccount {
-        String regex = "^\\d{10}$\n";
+        String regex = "^3\\d{9}$";
         Pattern pattern = Pattern.compile(regex);
 
         Matcher matcher = pattern.matcher(phoneInput);
@@ -31,7 +31,7 @@ public class Validaciones {
     }
 
     public void validateDocument(String documentInput) throws ExceptionValidateAccount {
-        String regex = "^\\d{8,11}$\n";
+        String regex = "^1\\d{8,11}$";
         Pattern pattern = Pattern.compile(regex);
 
         Matcher matcher = pattern.matcher(documentInput);
@@ -41,7 +41,7 @@ public class Validaciones {
     }
 
     public void validateMail(String mailInput) throws ExceptionValidateAccount {
-        String regex = "^[a-zA-Z]{1}[a-zA-Z0-9.]{3,}@[a-zA-Z]+\\.(com|co\\.uk|outlook\\.com)$";
+        String regex = "";
 
         if (!Pattern.matches(regex, mailInput)) {
             throw new ExceptionValidateAccount("The Mail must contain at least (letters, @, gmail(etc..).com(etc..))");
@@ -49,7 +49,7 @@ public class Validaciones {
     }
 
     public void validatePassword(String passwordInput) throws ExceptionValidateAccount {
-        String regex = "^(?=(?:.*[A-Za-z]){4})(?=.*\\d)[A-Za-z\\d]{4,}$\n";
+        String regex = "";
 
         if (!Pattern.matches(regex, passwordInput)) {
             throw new ExceptionValidateAccount("The password must have a minimum of (4 letters and 1 number)");
