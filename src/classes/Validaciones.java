@@ -41,7 +41,7 @@ public class Validaciones {
     }
 
     public void validateMail(String mailInput) throws ExceptionValidateAccount {
-        String regex = "";
+        String regex = "^[a-zA-Z]{1}[a-zA-Z0-9.]{3,}@[a-zA-Z]+\\.(com|co\\.uk|outlook\\.com)$\n";
 
         if (!Pattern.matches(regex, mailInput)) {
             throw new ExceptionValidateAccount("The Mail must contain at least (letters, @, gmail(etc..).com(etc..))");
@@ -49,7 +49,7 @@ public class Validaciones {
     }
 
     public void validatePassword(String passwordInput) throws ExceptionValidateAccount {
-        String regex = "";
+        String regex = "^[a-zA-Z0-9\\s.,@!*_?¿\"'¨+/#-]{4,}$";
 
         if (!Pattern.matches(regex, passwordInput)) {
             throw new ExceptionValidateAccount("The password must have a minimum of (4 letters and 1 number)");

@@ -2,57 +2,37 @@ package classes;
 
 import java.time.LocalDateTime;
 
-public class Product {
-    private String name;
-    private Double price;
-    private Integer stock;
+public class Customer extends Person {
     private Integer id;
+    private String address;
     private LocalDateTime dateCreation;
     private LocalDateTime dateModification;
     private LocalDateTime dateElimination;
 
-    public Product(String name, Double price, Integer stock, Integer id, LocalDateTime dateCreation, LocalDateTime dateElimination) {
-        this.name = name;
-        this.price = price;
-        this.stock = stock;
+    public Customer(Integer id, String address) {
         this.id = id;
-        this.dateCreation = dateCreation;
-        this.dateElimination = dateElimination;
+        this.address = address;
     }
 
-    public Product() {
+    public Customer() {
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Double getPrice() {
-        return price;
-    }
-
-    public void setPrice(Double price) {
-        this.price = price;
-    }
-
-    public Integer getStock() {
-        return stock;
-    }
-
-    public void setStock(Integer stock) {
-        this.stock = stock;
-    }
-
+    @Override
     public Integer getId() {
         return id;
     }
 
+    @Override
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     public LocalDateTime getDateCreation() {
@@ -79,9 +59,15 @@ public class Product {
         this.dateElimination = dateElimination;
     }
 
-    @Override
-    public String toString() {
-        return name + "," + price + "," + stock + "," + id + "," +
-                dateCreation + "," + dateModification + "," + dateElimination;
+    public void buyProduct() {
     }
+
+    public void listProduct() {
+    }
+
+    public String toString() {
+        return id + "," + address + "," + dateCreation + "," +
+                dateModification + "," + dateElimination;
+    }
+
 }
