@@ -26,7 +26,7 @@ public class Validaciones {
 
         Matcher matcher = pattern.matcher(phoneInput);
         if (!matcher.matches()) {
-            throw new ExceptionValidateAccount("The phone number must have (10 digits)");
+            throw new ExceptionValidateAccount("The number phone must start with a (3) and must be (10 digits)");
         }
     }
 
@@ -36,7 +36,7 @@ public class Validaciones {
 
         Matcher matcher = pattern.matcher(documentInput);
         if (!matcher.matches()) {
-            throw new ExceptionValidateAccount("The Document can have between (8 to 11 numbers)");
+            throw new ExceptionValidateAccount("The Document must begin with a (1) and can have between (8 to 11 numbers)");
         }
     }
 

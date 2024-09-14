@@ -65,6 +65,7 @@ public class Employee {
         this.dateElimination = dateElimination;
     }
 
+    @Override
     public String toString() {
         return id + "," + rol + "," + salary + "," + dateCreation + "," +
                 dateModification + "," + dateElimination;

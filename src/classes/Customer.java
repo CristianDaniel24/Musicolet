@@ -65,9 +65,9 @@ public class Customer extends Person {
     public void listProduct() {
     }
 
+    @Override
     public String toString() {
         return id + "," + address + "," + dateCreation + "," +
                 dateModification + "," + dateElimination;
     }
-
 }

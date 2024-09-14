@@ -138,7 +138,7 @@ public class ProductService {
 
     }
 
-    //METODOS MAIN
+
     public int getLastId() throws IOException {
         int lastId = 0;
         BufferedReader reader = new BufferedReader(new FileReader(FileRoutes.RUTE_PRODUCTS));
