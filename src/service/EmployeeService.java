@@ -1,6 +1,7 @@
 package service;
 
 import classes.Employee;
+import classes.Person;
 import constants.FileRoutes;
 import constants.ServiceConstants;
 
@@ -9,7 +10,7 @@ import java.time.LocalDateTime;
 
 public class EmployeeService {
 
-    public void menuEmployee() throws IOException {
+    public void menuEmployee(Person person) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         BufferedReader readerProducts = new BufferedReader(new FileReader(FileRoutes.RUTE_PRODUCTS));
         BufferedWriter writer = new BufferedWriter(new FileWriter(FileRoutes.RUTE_PRODUCTS, true));
@@ -17,7 +18,7 @@ public class EmployeeService {
         boolean exit = false;
         while (!exit) {
             try {
-                System.out.println("\nWELCOME TO THE EMPLOYEE MENU!!");
+                System.out.println("\nWELCOME " + person.getName() + " to the menu EMPLOYEE!!");
                 System.out.println("1. Add product");
                 System.out.println("2. Edit product");
                 System.out.println("3. Delete product");
@@ -73,19 +74,20 @@ public class EmployeeService {
         writerEmployee.close();
     }
 
-    public void searchIdEmployee() throws IOException {
+    public boolean searchIdEmployee(Person person) throws IOException {
         BufferedReader readerFileEmployee = new BufferedReader(new FileReader(FileRoutes.RUTE_EMPLOYEE));
         String lineEmployee;
+        boolean yes = false;
         while ((lineEmployee = readerFileEmployee.readLine()) != null) {
             String[] dataEmployee = lineEmployee.split(",");
             int idEmployee = Integer.parseInt(dataEmployee[0]);
-            int idPerson = ServiceConstants.PERSON_SERVICE.createPerson().getId();
+            int idPerson = person.getId();
 
             if (idPerson == idEmployee) {
-                readerFileEmployee.close();
-                //SE LLAMA EL MENU??
-                menuEmployee();
+                yes = true;
+                break;
             }
         }
+        return yes;
     }
 }

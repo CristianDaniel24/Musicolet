@@ -2,12 +2,10 @@ package classes;
 
 import exceptions.ExceptionValidateAccount;
 
-import java.io.BufferedReader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Validaciones {
-    private BufferedReader readerFile;
 
     public Validaciones() {
     }
@@ -31,27 +29,22 @@ public class Validaciones {
     }
 
     public void validateDocument(String documentInput) throws ExceptionValidateAccount {
-        String regex = "^1\\d{8,11}$";
-        Pattern pattern = Pattern.compile(regex);
-
-        Matcher matcher = pattern.matcher(documentInput);
-        if (!matcher.matches()) {
+        String regex = "^1\\d{7,10}$";
+        if (!documentInput.matches(regex)) {
             throw new ExceptionValidateAccount("The Document must begin with a (1) and can have between (8 to 11 numbers)");
         }
     }
 
     public void validateMail(String mailInput) throws ExceptionValidateAccount {
-        String regex = "^[a-zA-Z]{1}[a-zA-Z0-9.]{3,}@[a-zA-Z]+\\.(com|co\\.uk|outlook\\.com)$\n";
-
-        if (!Pattern.matches(regex, mailInput)) {
+        String regex = "^[a-zA-Z]{4}[a-zA-Z0-9.]*@[a-zA-Z]+\\.(com|co\\.uk|outlook\\.com)$";
+        if (!mailInput.matches(regex)) {
             throw new ExceptionValidateAccount("The Mail must contain at least (letters, @, gmail(etc..).com(etc..))");
         }
     }
 
     public void validatePassword(String passwordInput) throws ExceptionValidateAccount {
         String regex = "^[a-zA-Z0-9\\s.,@!*_?¿\"'¨+/#-]{4,}$";
-
-        if (!Pattern.matches(regex, passwordInput)) {
+        if (!passwordInput.matches(regex)) {
             throw new ExceptionValidateAccount("The password must have a minimum of (4 letters and 1 number)");
         }
     }

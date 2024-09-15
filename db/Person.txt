@@ -1,6 +1,4 @@
-Carlos,3120398579,104857368,carlos123@gmail.com,carlos789,1
-Pepito,390385940,124531353,pepitojose@gmail.com,pepito45,2
-Cristian,3505011958,1057979062,cristianponguta789@gmail.com,cristian789,3
-Andres,3205978923,1093847582,andres12@gmail.com,andres1224,4
-Luca,3098374923,1384728394,luca98@gmail.com,lucasss,5
-Nicolas,3029485678,1847562384,nico45@outlook.com,nicoooo,6
+Cristian,3503015843,1057979062,cristianponguta789@gmail.com,cristian12,1
+jose,3102349874,1057979062,jose12@gmail.com,jose34,2
+Felipe,3103948756,1057979062,felipe@gmail.com,falipe12,3
+Carlos,3024958390,1057979062,carlos12@gmail.com,carlos12,4

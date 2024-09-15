@@ -1,6 +1,7 @@
 package service;
 
 import classes.Customer;
+import classes.Person;
 import constants.FileRoutes;
 import constants.ServiceConstants;
 
@@ -9,14 +10,14 @@ import java.time.LocalDateTime;
 
 public class CustomerService {
 
-    public static void menuCustomer() throws IOException {
+    public void menuCustomer(Person person) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
         Customer customer = new Customer();
         boolean exit = false;
         while (!exit) {
             try {
-                System.out.println("\nWELCOME TO THE CUSTOMER'S MENU!!");
+                System.out.println("\nWELCOME " + person.getName() + " to the menu CUSTOMER!!");
                 System.out.println("1. Buy product");
                 System.out.println("2. List of products");
                 System.out.println("3. Exit");
@@ -59,19 +60,20 @@ public class CustomerService {
         writerCustomer.close();
     }
 
-    public void searchIdCustomer() throws IOException {
+    public boolean searchIdCustomer(Person person) throws IOException {
         BufferedReader readerFileCustomer = new BufferedReader(new FileReader(FileRoutes.RUTE_CUSTOMER));
         String lineCustomer;
+        boolean yes = false;
         while ((lineCustomer = readerFileCustomer.readLine()) != null) {
             String[] dataCustomer = lineCustomer.split(",");
             int idCustomer = Integer.parseInt(dataCustomer[0]);
-            int idPerson = ServiceConstants.PERSON_SERVICE.createPerson().getId();
+            int idPerson = person.getId();
 
             if (idPerson == idCustomer) {
-                readerFileCustomer.close();
-                //SE LLAMA EL MENU??
-                menuCustomer();
+                yes = true;
+                break;
             }
         }
+        return yes;
     }
 }

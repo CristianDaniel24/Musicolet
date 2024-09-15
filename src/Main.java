@@ -28,7 +28,6 @@ public class Main {
                 switch (option) {
                     case 1:
                         createAccount(reader);
-                        System.out.println("....");
                         break;
                     case 2:
                         login(reader);
@@ -59,8 +58,10 @@ public class Main {
 
                 if (option == 1) {
                     ServiceConstants.EMPLOYEE_SERVICE.createEmployee(reader);
+                    return;
                 } else if (option == 2) {
                     ServiceConstants.CUSTOMER_SERVICE.createCustomer(reader);
+                    return;
                 } else if (option == 3) {
                     exit = true;
                 } else {
@@ -80,6 +81,7 @@ public class Main {
 
         System.out.println("Enter your password:");
         String passwordInput = reader.readLine();
+
         boolean login = false;
         String line;
         Person person = new Person();
@@ -105,9 +107,13 @@ public class Main {
             }
         }
         if (login) {
-            ServiceConstants.EMPLOYEE_SERVICE.searchIdEmployee();
-
-            ServiceConstants.CUSTOMER_SERVICE.searchIdCustomer();
+            if (ServiceConstants.EMPLOYEE_SERVICE.searchIdEmployee(person)) {
+                ServiceConstants.EMPLOYEE_SERVICE.menuEmployee(person);
+            } else if (ServiceConstants.CUSTOMER_SERVICE.searchIdCustomer(person)) {
+                ServiceConstants.CUSTOMER_SERVICE.menuCustomer(person);
+            } else {
+                System.out.println("ERRORRR");
+            }
         } else {
             System.out.println("\nThe mail or password are invalids");
         }
