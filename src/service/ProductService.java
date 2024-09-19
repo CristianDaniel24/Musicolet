@@ -9,32 +9,32 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProductService {
+
     public ProductService() {
     }
 
     public void addProduct(BufferedReader reader) throws IOException {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FileRoutes.RUTE_PRODUCTS, true))) {
-            int lastId = getLastIdProducts();
+        BufferedWriter writer = new BufferedWriter(new FileWriter(FileRoutes.RUTE_PRODUCTS, true));
+        int lastId = getLastIdProducts();
 
-            Product product = new Product();
-            System.out.println("\nEnter the name:");
-            String name = reader.readLine();
-            product.setName(name);
-            System.out.println("Enter the price:");
-            Double price = Double.parseDouble(reader.readLine());
-            product.setPrice(price);
-            System.out.println("Enter the stock:");
-            Integer stock = Integer.parseInt(reader.readLine());
-            product.setStock(stock);
-            product.setId(lastId + 1);
+        Product product = new Product();
+        System.out.println("\nEnter the name:");
+        String name = reader.readLine();
+        product.setName(name);
+        System.out.println("Enter the price:");
+        Double price = Double.parseDouble(reader.readLine());
+        product.setPrice(price);
+        System.out.println("Enter the stock:");
+        Integer stock = Integer.parseInt(reader.readLine());
+        product.setStock(stock);
+        product.setId(lastId + 1);
 
-            LocalDateTime dateTimeCurrent = LocalDateTime.now();
-            product.setDateCreation(dateTimeCurrent);
+        LocalDateTime dateTimeCurrent = LocalDateTime.now();
+        product.setDateCreation(dateTimeCurrent);
 
-            writer.write(product + System.lineSeparator());
-            writer.close();
-            detailsProduct();
-        }
+        writer.write(product + System.lineSeparator());
+        writer.close();
+        detailsProduct();
     }
 
     public void detailsProduct() throws IOException {
@@ -44,7 +44,6 @@ public class ProductService {
         while ((line = reader.readLine()) != null) {
             System.out.println(line);
         }
-        reader.close();
     }
 
     public int getLastIdProducts() throws IOException {
@@ -55,16 +54,14 @@ public class ProductService {
             String[] data = line.split(",");
             lastId = Integer.parseInt(data[3]);
         }
-        reader.close();
         return lastId;
     }
 
 
-    public void editProduct(BufferedReader reader, BufferedReader readerProducts, BufferedWriter writer) throws IOException {
-
+    public void editProduct(BufferedReader reader) throws IOException {
         List<Product> listProducts = new ArrayList<>();
 
-        try {
+        try (BufferedReader readerProducts = new BufferedReader(new FileReader(FileRoutes.RUTE_PRODUCTS))) {
             String line;
             while ((line = readerProducts.readLine()) != null) {
                 String[] data = line.split(",");
@@ -73,8 +70,18 @@ public class ProductService {
                 int stock = Integer.parseInt(data[2]);
                 int id = Integer.parseInt(data[3]);
                 LocalDateTime dateCreation = LocalDateTime.parse(data[4]);
-                LocalDateTime dateEliminate = LocalDateTime.parse(data[6]);
-                listProducts.add(new Product(name, price, stock, id, dateCreation, dateEliminate));
+
+                LocalDateTime dateEdition = null;
+                if (!data[5].equals("null")) {
+                    dateEdition = LocalDateTime.parse(data[5]);
+                }
+
+                LocalDateTime dateEliminate = null;
+                if (!data[6].equals("null")) {
+                    dateEliminate = LocalDateTime.parse(data[6]);
+                }
+
+                listProducts.add(new Product(name, price, stock, id, dateCreation, dateEdition, dateEliminate));
             }
         } catch (IOException e) {
             System.out.println("Error when reading the file");
@@ -105,21 +112,21 @@ public class ProductService {
             LocalDateTime dateModification = LocalDateTime.now();
             productFound.setDateModification(dateModification);
 
-            BufferedWriter writer1 = new BufferedWriter(new FileWriter(FileRoutes.RUTE_PRODUCTS, false));
+            BufferedWriter writer = new BufferedWriter(new FileWriter(FileRoutes.RUTE_PRODUCTS, false));
             for (Product product : listProducts) {
-                writer1.write(product.toString());
-                writer1.newLine();
+                writer.write(product.toString());
+                writer.newLine();
             }
-            writer1.close();
             System.out.println("\nSuccessfully edited product");
             detailsProduct();
+            writer.close();
         } else {
             System.out.println("The product with id: " + idInput + " was not found");
         }
     }
 
 
-    public void deletedProduct(BufferedReader reader, BufferedReader readerProducts) throws IOException {
+    public void deletedProduct() throws IOException {
 
     }
 
@@ -131,7 +138,6 @@ public class ProductService {
             String[] data = line.split(",");
             System.out.println("\nTipe: " + data[0] + "\n" + "Price: " + data[1] + "\n" + "Id: " + data[3]);
         }
-        reader.close();
     }
 
     public void listProductDeleted() throws IOException {
@@ -147,7 +153,6 @@ public class ProductService {
             String[] data = line.split(",");
             lastId = Integer.parseInt(data[5]);
         }
-        reader.close();
         return lastId;
     }
 
@@ -158,6 +163,5 @@ public class ProductService {
         while ((line = reader.readLine()) != null) {
             System.out.println(line);
         }
-        reader.close();
     }
 }

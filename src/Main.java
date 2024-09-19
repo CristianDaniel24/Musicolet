@@ -1,6 +1,7 @@
 import classes.Person;
 import constants.FileRoutes;
 import constants.ServiceConstants;
+import exceptions.MusicoletException;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -41,8 +42,11 @@ public class Main {
                 }
             } catch (NumberFormatException e) {
                 System.out.println("\nEnter the number, please");
+            } catch (MusicoletException e) {
+                System.out.println("Error: " + e.getMessage());
             }
         }
+        reader.close();
     }
 
     public static void createAccount(BufferedReader reader) throws IOException {
@@ -73,7 +77,7 @@ public class Main {
         }
     }
 
-    public static void login(BufferedReader reader) throws IOException {
+    public static void login(BufferedReader reader) throws IOException, MusicoletException {
         BufferedReader readerFile = new BufferedReader(new FileReader(FileRoutes.RUTE_PERSON));
 
         System.out.println("Enter your mail:");
@@ -112,10 +116,11 @@ public class Main {
             } else if (ServiceConstants.CUSTOMER_SERVICE.searchIdCustomer(person)) {
                 ServiceConstants.CUSTOMER_SERVICE.menuCustomer(person);
             } else {
-                System.out.println("ERRORRR");
+                //Error al no encontrar a la persona
+                throw new MusicoletException("Unable to find user list, please reset the file");
             }
         } else {
-            System.out.println("\nThe mail or password are invalids");
+            throw new MusicoletException("The mail or password are invalids");
         }
         readerFile.close();
     }

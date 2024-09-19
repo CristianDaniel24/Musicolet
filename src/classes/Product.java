@@ -11,12 +11,13 @@ public class Product {
     private LocalDateTime dateModification;
     private LocalDateTime dateElimination;
 
-    public Product(String name, Double price, Integer stock, Integer id, LocalDateTime dateCreation, LocalDateTime dateElimination) {
+    public Product(String name, Double price, Integer stock, Integer id, LocalDateTime dateCreation, LocalDateTime dateModification, LocalDateTime dateElimination) {
         this.name = name;
         this.price = price;
         this.stock = stock;
         this.id = id;
         this.dateCreation = dateCreation;
+        this.dateModification = dateModification;
         this.dateElimination = dateElimination;
     }
 
@@ -77,6 +78,10 @@ public class Product {
 
     public void setDateElimination(LocalDateTime dateElimination) {
         this.dateElimination = dateElimination;
+    }
+
+    public void detailsProduct() {
+        System.out.printf("%-15s %,-15.2f %-5s %-10d%n", name, price, id, stock);
     }
 
     @Override

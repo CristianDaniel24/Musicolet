@@ -10,52 +10,6 @@ import java.time.LocalDateTime;
 
 public class EmployeeService {
 
-    public void menuEmployee(Person person) throws IOException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        BufferedReader readerProducts = new BufferedReader(new FileReader(FileRoutes.RUTE_PRODUCTS));
-        BufferedWriter writer = new BufferedWriter(new FileWriter(FileRoutes.RUTE_PRODUCTS, true));
-
-        boolean exit = false;
-        while (!exit) {
-            try {
-                System.out.println("\nWELCOME " + person.getName() + " to the menu EMPLOYEE!!");
-                System.out.println("1. Add product");
-                System.out.println("2. Edit product");
-                System.out.println("3. Delete product");
-                System.out.println("4. List of products");
-                System.out.println("5. Exit");
-                System.out.println("Enter the option:");
-                int option = Integer.parseInt(reader.readLine());
-
-                switch (option) {
-                    case 1:
-                        ServiceConstants.PRODUCT_SERVICES.addProduct(reader);
-                        break;
-                    case 2:
-                        ServiceConstants.PRODUCT_SERVICES.editProduct(reader, readerProducts, writer);
-                        readerProducts.close();
-                        writer.close();
-                        break;
-                    case 3:
-                        ServiceConstants.PRODUCT_SERVICES.deletedProduct(reader, readerProducts);
-                        readerProducts.close();
-                        break;
-                    case 4:
-                        ServiceConstants.PRODUCT_SERVICES.listProductDeleted();
-                        break;
-                    case 5:
-                        System.out.println("Bye..");
-                        exit = true;
-                        break;
-                    default:
-                        System.out.println("\nThe option is invalid");
-                }
-            } catch (NumberFormatException e) {
-                System.out.println("\nEnter the number, please");
-            }
-        }
-    }
-
     public void createEmployee(BufferedReader reader) throws IOException {
 
         ServiceConstants.PERSON_SERVICE.createPerson();
@@ -90,4 +44,45 @@ public class EmployeeService {
         }
         return yes;
     }
+
+    public void menuEmployee(Person person) throws IOException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        boolean exit = false;
+        while (!exit) {
+            try {
+                System.out.printf("\nWELCOME %s to the menu EMPLOYEE!!\n", person.getName());
+                System.out.println("1. Add product");
+                System.out.println("2. Edit product");
+                System.out.println("3. Delete product");
+                System.out.println("4. List of products");
+                System.out.println("5. Exit");
+                System.out.println("Enter the option:");
+                int option = Integer.parseInt(reader.readLine());
+                switch (option) {
+                    case 1:
+                        ServiceConstants.PRODUCT_SERVICES.addProduct(reader);
+                        break;
+                    case 2:
+                        ServiceConstants.PRODUCT_SERVICES.editProduct(reader);
+                        break;
+                    case 3:
+                        ServiceConstants.PRODUCT_SERVICES.deletedProduct();
+                        break;
+                    case 4:
+                        ServiceConstants.PRODUCT_SERVICES.listProductDeleted();
+                        break;
+                    case 5:
+                        System.out.println("Bye..");
+                        exit = true;
+                        break;
+                    default:
+                        System.out.println("\nThe option is invalid");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("\nEnter the number, please");
+            }
+        }
+    }
+
+
 }

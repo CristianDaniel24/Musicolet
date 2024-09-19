@@ -59,12 +59,6 @@ public class Customer extends Person {
         this.dateElimination = dateElimination;
     }
 
-    public void buyProduct() {
-    }
-
-    public void listProduct() {
-    }
-
     @Override
     public String toString() {
         return id + "," + address + "," + dateCreation + "," +
