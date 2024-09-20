@@ -1,78 +1,51 @@
 package service;
 
 import classes.Product;
-import classes.ShoppingCart;
 import constants.FileRoutes;
+import constants.ReaderConstants;
+import constants.ServiceConstants;
 import exceptions.MusicoletException;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.LinkedList;
 
 public class ShoppingCartService {
 
     public ShoppingCartService() {
     }
 
-    public static void addProduct(BufferedReader reader, Product[] products) throws MusicoletException {
-
-        int count = 0;
-
-        try (BufferedReader readerProducts = new BufferedReader(new FileReader(FileRoutes.RUTE_PRODUCTS))) {
-            ShoppingCart shoppingCart = new ShoppingCart();
+    public void addProduct(LinkedList<Product> productList, HashMap<Product, Integer> productsShoppingCart) throws MusicoletException {
+        try {
             System.out.println("Enter the id for add ShoppingCart:");
-            int idInput = Integer.parseInt(reader.readLine());
+            int idInput = Integer.parseInt(ReaderConstants.reader.readLine());
 
-            String line;
-            while ((line = readerProducts.readLine()) != null) {
-                System.out.println(line);
-                String[] data = line.split(",");
-                if (data.length >= 7) {
-
-                    String name = data[0];
-                    Double price = Double.parseDouble(data[1]);
-                    int stock = Integer.parseInt(data[2]);
-                    int idFile = Integer.parseInt(data[3]);
-                    LocalDateTime dateCreation = LocalDateTime.parse(data[4]);
-
-                    LocalDateTime dateEdition = null;
-                    if (!data[5].equals("null")) {
-                        dateEdition = LocalDateTime.parse(data[5]);
-                    }
-
-                    LocalDateTime dateEliminate = null;
-                    if (!data[6].equals("null")) {
-                        dateEliminate = LocalDateTime.parse(data[6]);
-                    }
-
-                    System.out.println("ID Input: " + idInput);
-                    System.out.println("ID File: " + idFile);
-                    if (idInput == idFile) {
-                        products[count] = new Product(name, price, stock, idFile, dateCreation, dateEdition, dateEliminate);
-                        count++;
-                        //AGREGAR??
-                        //shoppingCart.addProduct(products);
-                        shoppingCart.detailsShoppingCart();
-                        break;
-                    } else {
-                        throw new MusicoletException("The id is invalid");
-                    }
+            boolean found = false;
+            for (Product products : productList) {
+                if (idInput == products.getId()) {
+                    int count = productsShoppingCart.getOrDefault(products, 1);
+                    productsShoppingCart.put(products, count);
+                    System.out.println("The product added successfully");
+                    found = true;
+                    break;
                 }
+            }
+            if (!found) {
+                throw new MusicoletException("The id is invalid");
             }
         } catch (NumberFormatException e) {
             System.out.println("Enter the number, please");
         } catch (IOException e) {
             throw new RuntimeException(e);
+        } catch (MusicoletException e) {
+            System.out.println(e.getMessage());
         }
-        System.out.printf("%-15s %-15s %-5s %-10s%n", "Name", "Price", "ID", "Stock");
-        System.out.println("---------------------------------------------");
-        for (int i = 0; i < count; i++) {
-            products[i].detailsProduct();
-        }
+
     }
 
-    public static int getLastIdProducts() throws IOException {
+    public int getLastIdProducts() throws IOException {
         int lastId = 0;
         BufferedReader reader = new BufferedReader(new FileReader(FileRoutes.RUTE_PRODUCTS));
         String line;
@@ -83,42 +56,76 @@ public class ShoppingCartService {
         return lastId;
     }
 
-    public static void removeProduct(BufferedReader reader, Product[] products) throws MusicoletException, IOException {
-        ShoppingCart shoppingCart = new ShoppingCart();
-        try (BufferedReader readerProducts = new BufferedReader(new FileReader(FileRoutes.RUTE_PRODUCTS))) {
-            System.out.println("\nEnter the id of deleted");
-            int idInput = Integer.parseInt(reader.readLine());
-
-            boolean productFound = false;
-            // Iterar sobre el array de productos
-            for (Product product : products) {
-                if (product != null && product.getId() == idInput) {
-                    // Verificar si el producto está en el HashMap (carrito)
-                    if (products.containsKey(product)) {
-                        // Eliminar el producto del carrito
-                        products.remove(product);
-                        System.out.println("The product has been successfully removed from the cart: " + product.getName());
-                    } else {
-                        System.out.println("The product is not in the cart");
-                    }
-                    productFound = true;
-                    break;
-                }
-            }
-
-            if (!productFound) {
-                System.out.println("A product was not found or an invalid id");
+    public void removeProduct(LinkedList<Product> productList, HashMap<Product, Integer> productsShoppingCart) throws MusicoletException, IOException {
+        try {
+            boolean found = false;
+            if (productsShoppingCart.isEmpty()) {
+                System.out.println("\nThe shoppingCart is empty");
             } else {
-                throw new MusicoletException("The id is invalid");
+                System.out.println("\nEnter the id of deleted");
+                int idInput = Integer.parseInt(ReaderConstants.reader.readLine());
+                for (Product product : productList) {
+                    if (idInput == product.getId()) {
+                        int count = productsShoppingCart.getOrDefault(product, 1);
+                        productsShoppingCart.remove(product, count);
+                        System.out.println("\nThe product has been successfully removed");
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    throw new MusicoletException("The id is invalid");
+                }
             }
         } catch (NumberFormatException e) {
             System.out.println("\nEnter the number, please");
+        } catch (MusicoletException e) {
+            System.out.println(e.getMessage());
         }
     }
 
-    public static void finishAndPay() {
+    public void listProduct(LinkedList<Product> productList, HashMap<Product, Integer> productsShoppingCart) {
+        if (!productsShoppingCart.isEmpty()) {
+            System.out.println("\n-----------------------------------------------------");
+            System.out.printf("%-10s %-20s %-10s %-10s\n", "ID", "Name", "Price", "Amount");
+            for (Product product : productList) {
+                if (productsShoppingCart.containsKey(product)) {
+                    int id = product.getId();
+                    String name = product.getName();
+                    Double price = product.getPrice();
+
+                    int amount = productsShoppingCart.get(product);
+
+                    System.out.printf("%-10s %-20s %-10s %-10s\n", id, name, price, amount);
+                }
+            }
+            System.out.println("-----------------------------------------------------");
+        } else {
+            System.out.println("\nThe shoppingCart is empty");
+        }
     }
 
-    public static void listProduct() {
+    public void finishAndPay(LinkedList<Product> productList, HashMap<Product, Integer> productsShoppingCart) {
+        if (!productsShoppingCart.isEmpty()) {
+            System.out.println("\n----------------------------------------------------------------------------------------------");
+            System.out.printf("%-25s %-25s %-25s %-25s\n", "ID", "Name", "Price", "Amount");
+            System.out.println("----------------------------------------------------------------------------------------------");
+            for (Product product : productList) {
+                if (productsShoppingCart.containsKey(product)) {
+                    int id = product.getId();
+                    String name = product.getName();
+                    Double price = product.getPrice();
+
+                    int amount = productsShoppingCart.get(product);
+
+                    System.out.printf("%-25s %-25s %-25s %-25s\n", "", name, price, amount);
+                    Double total = product.getPrice() + product.getPrice();
+                    ServiceConstants.BILL.setTotal(total);
+                    ServiceConstants.BILL.detailsBill();
+                }
+            }
+        } else {
+            System.out.println("\nThe shoppingCart is empty");
+        }
     }
 }

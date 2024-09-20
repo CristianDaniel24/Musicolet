@@ -3,12 +3,14 @@ package service;
 import classes.Customer;
 import classes.Person;
 import classes.Product;
+import classes.ShoppingCart;
 import constants.FileRoutes;
 import constants.ServiceConstants;
 import exceptions.MusicoletException;
 
 import java.io.*;
 import java.time.LocalDateTime;
+import java.util.LinkedList;
 
 public class CustomerService {
 
@@ -82,27 +84,9 @@ public class CustomerService {
     }
 
     public void buyProduct(BufferedReader reader) throws IOException {
-        BufferedReader readerProducts = new BufferedReader(new FileReader(FileRoutes.RUTE_PRODUCTS));
-        Product[] products = new Product[100];
-
-        System.out.println("---------------------------------------------");
-        System.out.printf("%-15s %-15s %-5s %-10s\n", "Name", "Price", "Id", "stock");
-        String line;
-        while ((line = readerProducts.readLine()) != null) {
-            String[] data = line.split(",");
-            if (data.length >= 4) { // Se asegura de que haya al menos 4 elementos
-                String name = data[0];
-                Double price = Double.parseDouble(data[1]);
-                String stock = data[2];
-                String id = data[3];
-
-                System.out.printf("%-15s %,-15.2f %-5s %-10s%n", name, price, id, stock);
-            } else {
-                System.out.println("Linea mal formateada: " + line);
-            }
-        }
-        System.out.println("---------------------------------------------");
-
+        LinkedList<Product> productList = ServiceConstants.PRODUCT_SERVICES.getProducts();
+        ServiceConstants.PRODUCT_SERVICES.printTable(productList);
+        ShoppingCart shoppingCart = new ShoppingCart();
         boolean exit = false;
         while (!exit) {
             try {
@@ -115,16 +99,16 @@ public class CustomerService {
                 int option = Integer.parseInt(reader.readLine());
                 switch (option) {
                     case 1:
-                        ShoppingCartService.addProduct(reader, products);
+                        ServiceConstants.SHOPPING_CART_SERVICE.addProduct(productList, shoppingCart.getProducts());
                         break;
                     case 2:
-                        ShoppingCartService.removeProduct(reader, products);
+                        ServiceConstants.SHOPPING_CART_SERVICE.removeProduct(productList, shoppingCart.getProducts());
                         break;
                     case 3:
-                        ShoppingCartService.finishAndPay();
+                        ServiceConstants.SHOPPING_CART_SERVICE.finishAndPay(productList, shoppingCart.getProducts());
                         break;
                     case 4:
-                        ShoppingCartService.listProduct();
+                        ServiceConstants.SHOPPING_CART_SERVICE.listProduct(productList, shoppingCart.getProducts());
                         break;
                     case 5:
                         exit = true;

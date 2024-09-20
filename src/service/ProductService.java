@@ -6,11 +6,29 @@ import constants.FileRoutes;
 import java.io.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class ProductService {
 
     public ProductService() {
+    }
+
+    private static Product getProduct(String[] data, String name, Double price) {
+        Integer stock = Integer.parseInt(data[2]);
+        Integer id = Integer.parseInt(data[3]);
+        LocalDateTime dateCreation = LocalDateTime.parse(data[4]);
+
+        LocalDateTime dateEdition = null;
+        if (!data[5].equals("null")) {
+            dateEdition = LocalDateTime.parse(data[5]);
+        }
+
+        LocalDateTime dateEliminate = null;
+        if (!data[6].equals("null")) {
+            dateEliminate = LocalDateTime.parse(data[6]);
+        }
+        return new Product(name, price, stock, id, dateCreation, dateEdition, dateEliminate);
     }
 
     public void addProduct(BufferedReader reader) throws IOException {
@@ -56,7 +74,6 @@ public class ProductService {
         }
         return lastId;
     }
-
 
     public void editProduct(BufferedReader reader) throws IOException {
         List<Product> listProducts = new ArrayList<>();
@@ -125,7 +142,6 @@ public class ProductService {
         }
     }
 
-
     public void deletedProduct() throws IOException {
 
     }
@@ -143,7 +159,6 @@ public class ProductService {
     public void listProductDeleted() throws IOException {
 
     }
-
 
     public int getLastId() throws IOException {
         int lastId = 0;
@@ -163,5 +178,29 @@ public class ProductService {
         while ((line = reader.readLine()) != null) {
             System.out.println(line);
         }
+    }
+
+    public LinkedList<Product> getProducts() throws IOException {
+        BufferedReader readerProducts = new BufferedReader(new FileReader(FileRoutes.RUTE_PRODUCTS));
+        LinkedList<Product> productList = new LinkedList<>();
+        String line;
+        while ((line = readerProducts.readLine()) != null) {
+            String[] data = line.split(",");
+            String name = data[0];
+            Double price = Double.parseDouble(data[1]);
+            Product product = getProduct(data, name, price);
+            productList.add(product);
+        }
+        readerProducts.close();
+        return productList;
+    }
+
+    public void printTable(LinkedList<Product> productList) {
+        System.out.println("---------------------------------------------");
+        System.out.printf("%-15s %-15s %-5s %-10s\n", "Name", "Price", "Id", "stock");
+        for (Product product : productList) {
+            System.out.printf("%-15s %,-15.2f %-5s %-10s%n", product.getName(), product.getPrice(), product.getId(), product.getStock());
+        }
+        System.out.println("---------------------------------------------");
     }
 }

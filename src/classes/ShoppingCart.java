@@ -72,21 +72,6 @@ public class ShoppingCart {
         this.dateElimination = dateElimination;
     }
 
-    public void addProduct(Product product) {
-        // Verificar si el producto ya esta en el carrito
-        if (products.containsKey(product)) {
-            // Si el producto ya esta en el carrito se incrementa la cantidad
-            int currentQuantity = products.get(product);
-            products.put(product, currentQuantity + 1);
-        } else {
-            products.put(product, 1);
-        }
-    }
-
-    public void deletedProduct(Product[] product) {
-
-    }
-
     public void detailsShoppingCart() {
         for (Map.Entry<Product, Integer> product : products.entrySet()) {
             Product product1 = product.getKey();

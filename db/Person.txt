@@ -1,4 +1,2 @@
-Cristian,3503015843,1057979062,cristianponguta789@gmail.com,cristian12,1
-jose,3102349874,1057979062,jose12@gmail.com,jose34,2
-Felipe,3103948756,1057979062,felipe@gmail.com,falipe12,3
-Carlos,3024958390,1057979062,carlos12@gmail.com,carlos12,4
+Jose,3104578932,1057979062,jose12@gmail.com,josesito,1
+Carlo,3102948372,1057979062,carlos12@gmail.com,carlos12,2
