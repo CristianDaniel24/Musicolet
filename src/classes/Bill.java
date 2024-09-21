@@ -1,6 +1,10 @@
 package classes;
 
+import constants.ServiceConstants;
+
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Bill {
     private static int count = 0;
@@ -45,11 +49,32 @@ public class Bill {
         this.datePayment = datePayment;
     }
 
+    public void detailsProducts(HashMap<Product, Integer> productsShoppingCart) {
+        if (productsShoppingCart.isEmpty()) {
+            System.out.println("\nThe shoppingCart is empty");
+        } else {
+            Double total = 0.0;
+            System.out.println("\n-----------------------------------------------------------------------");
+            System.out.printf("%-10s %-20s %-10s %-10s %-10s\n", "ID", "Name", "Price", "Amount", "Total Product");
+            for (Map.Entry<Product, Integer> entry : productsShoppingCart.entrySet()) {
+                Product product = entry.getKey();
+                Integer quantity = entry.getValue();
+                Double priceProductTotal = product.getPrice() * quantity;
+                total += priceProductTotal;
+                System.out.printf("%-10s %-20s %-10s %-10s %-10s\n", product.getId(), product.getName(), product.getPrice(), quantity, priceProductTotal);
+            }
+            ServiceConstants.BILL.setTotal(total);
+        }
+        System.out.println("-----------------------------------------------------------------------");
+    }
+
     public void detailsBill() {
         LocalDateTime dateCreation = LocalDateTime.now();
         LocalDateTime datePayment = LocalDateTime.now();
-        System.out.printf("%-25s %-25s %-25s %-25s\n", "", "Total:", "Date Creation:", "Date Payment:");
-        System.out.printf("%-25d %-25.2f %-25s %-25s\n", id, total, dateCreation, datePayment);
-        System.out.println("----------------------------------------------------------------------------------------------");
+        System.out.printf("%-35s %-35s\n", "Id Bill", "Total:");
+        System.out.printf("%-35d %-35.2f\n", id, total);
+        System.out.printf("%-35s %-35s\n", "Date Creation:", "Date Payment:");
+        System.out.printf("%-35s %-35s\n", dateCreation, datePayment);
+        System.out.println("-----------------------------------------------------------------------");
     }
 }

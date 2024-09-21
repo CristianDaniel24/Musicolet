@@ -2,7 +2,6 @@ package classes;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
-import java.util.Map;
 
 public class ShoppingCart {
     private int id;
@@ -70,14 +69,5 @@ public class ShoppingCart {
 
     public void setDateElimination(LocalDateTime dateElimination) {
         this.dateElimination = dateElimination;
-    }
-
-    public void detailsShoppingCart() {
-        for (Map.Entry<Product, Integer> product : products.entrySet()) {
-            Product product1 = product.getKey();
-            Integer quantity = product.getValue();
-            System.out.println("Product: " + product1.getName());
-            System.out.println("Stock: " + quantity);
-        }
     }
 }

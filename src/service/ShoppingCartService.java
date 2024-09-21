@@ -11,6 +11,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 
 public class ShoppingCartService {
 
@@ -56,25 +57,22 @@ public class ShoppingCartService {
         return lastId;
     }
 
-    public void removeProduct(LinkedList<Product> productList, HashMap<Product, Integer> productsShoppingCart) throws MusicoletException, IOException {
+    public void removeProduct(HashMap<Product, Integer> productsShoppingCart) throws MusicoletException, IOException {
         try {
-            boolean found = false;
             if (productsShoppingCart.isEmpty()) {
                 System.out.println("\nThe shoppingCart is empty");
             } else {
                 System.out.println("\nEnter the id of deleted");
                 int idInput = Integer.parseInt(ReaderConstants.reader.readLine());
-                for (Product product : productList) {
-                    if (idInput == product.getId()) {
-                        int count = productsShoppingCart.getOrDefault(product, 1);
-                        productsShoppingCart.remove(product, count);
+
+                for (Product product : productsShoppingCart.keySet()) {
+                    if (product.getId() == idInput) {
+                        productsShoppingCart.remove(product);
                         System.out.println("\nThe product has been successfully removed");
-                        found = true;
                         break;
+                    } else {
+                        throw new MusicoletException("The id is invalid");
                     }
-                }
-                if (!found) {
-                    throw new MusicoletException("The id is invalid");
                 }
             }
         } catch (NumberFormatException e) {
@@ -84,48 +82,24 @@ public class ShoppingCartService {
         }
     }
 
-    public void listProduct(LinkedList<Product> productList, HashMap<Product, Integer> productsShoppingCart) {
-        if (!productsShoppingCart.isEmpty()) {
+    public void listProduct(HashMap<Product, Integer> productsShoppingCart) {
+        if (productsShoppingCart.isEmpty()) {
+            System.out.println("\nThe shoppingCart is empty");
+        } else {
             System.out.println("\n-----------------------------------------------------");
             System.out.printf("%-10s %-20s %-10s %-10s\n", "ID", "Name", "Price", "Amount");
-            for (Product product : productList) {
-                if (productsShoppingCart.containsKey(product)) {
-                    int id = product.getId();
-                    String name = product.getName();
-                    Double price = product.getPrice();
-
-                    int amount = productsShoppingCart.get(product);
-
-                    System.out.printf("%-10s %-20s %-10s %-10s\n", id, name, price, amount);
-                }
+            for (Map.Entry<Product, Integer> entry : productsShoppingCart.entrySet()) {
+                Product product = entry.getKey();
+                Integer quantity = entry.getValue();
+                System.out.printf("%-10s %-20s %-10s %-10s\n", product.getId(), product.getName(), product.getPrice(), quantity);
             }
-            System.out.println("-----------------------------------------------------");
-        } else {
-            System.out.println("\nThe shoppingCart is empty");
         }
+        System.out.println("-----------------------------------------------------");
     }
 
-    public void finishAndPay(LinkedList<Product> productList, HashMap<Product, Integer> productsShoppingCart) {
-        if (!productsShoppingCart.isEmpty()) {
-            System.out.println("\n----------------------------------------------------------------------------------------------");
-            System.out.printf("%-25s %-25s %-25s %-25s\n", "ID", "Name", "Price", "Amount");
-            System.out.println("----------------------------------------------------------------------------------------------");
-            for (Product product : productList) {
-                if (productsShoppingCart.containsKey(product)) {
-                    int id = product.getId();
-                    String name = product.getName();
-                    Double price = product.getPrice();
-
-                    int amount = productsShoppingCart.get(product);
-
-                    System.out.printf("%-25s %-25s %-25s %-25s\n", "", name, price, amount);
-                    Double total = product.getPrice() + product.getPrice();
-                    ServiceConstants.BILL.setTotal(total);
-                    ServiceConstants.BILL.detailsBill();
-                }
-            }
-        } else {
-            System.out.println("\nThe shoppingCart is empty");
-        }
+    //TODO: Arreglar metodo
+    public void finishAndPay(HashMap<Product, Integer> productsShoppingCart) {
+        ServiceConstants.BILL.detailsProducts(productsShoppingCart);
+        ServiceConstants.BILL.detailsBill();
     }
 }

@@ -102,13 +102,13 @@ public class CustomerService {
                         ServiceConstants.SHOPPING_CART_SERVICE.addProduct(productList, shoppingCart.getProducts());
                         break;
                     case 2:
-                        ServiceConstants.SHOPPING_CART_SERVICE.removeProduct(productList, shoppingCart.getProducts());
+                        ServiceConstants.SHOPPING_CART_SERVICE.removeProduct(shoppingCart.getProducts());
                         break;
                     case 3:
-                        ServiceConstants.SHOPPING_CART_SERVICE.finishAndPay(productList, shoppingCart.getProducts());
+                        ServiceConstants.SHOPPING_CART_SERVICE.finishAndPay(shoppingCart.getProducts());
                         break;
                     case 4:
-                        ServiceConstants.SHOPPING_CART_SERVICE.listProduct(productList, shoppingCart.getProducts());
+                        ServiceConstants.SHOPPING_CART_SERVICE.listProduct(shoppingCart.getProducts());
                         break;
                     case 5:
                         exit = true;
