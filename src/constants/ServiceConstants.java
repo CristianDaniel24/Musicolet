@@ -1,6 +1,5 @@
 package constants;
 
-import classes.Bill;
 import classes.Validaciones;
 import service.*;
 
@@ -11,5 +10,5 @@ public class ServiceConstants {
     public static final CustomerService CUSTOMER_SERVICE = new CustomerService();
     public static final Validaciones VALIDACIONES = new Validaciones();
     public static final ShoppingCartService SHOPPING_CART_SERVICE = new ShoppingCartService();
-    public static final Bill BILL = new Bill();
+    public static final BillService BILL_SERVICE = new BillService();
 }

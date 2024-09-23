@@ -1,14 +1,14 @@
 package service;
 
+import classes.Bill;
 import classes.Product;
-import constants.FileRoutes;
+import classes.ShoppingCart;
 import constants.ReaderConstants;
 import constants.ServiceConstants;
 import exceptions.MusicoletException;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
@@ -26,8 +26,8 @@ public class ShoppingCartService {
             boolean found = false;
             for (Product products : productList) {
                 if (idInput == products.getId()) {
-                    int count = productsShoppingCart.getOrDefault(products, 1);
-                    productsShoppingCart.put(products, count);
+                    int count = productsShoppingCart.getOrDefault(products, 0);
+                    productsShoppingCart.put(products, ++count);
                     System.out.println("The product added successfully");
                     found = true;
                     break;
@@ -44,17 +44,6 @@ public class ShoppingCartService {
             System.out.println(e.getMessage());
         }
 
-    }
-
-    public int getLastIdProducts() throws IOException {
-        int lastId = 0;
-        BufferedReader reader = new BufferedReader(new FileReader(FileRoutes.RUTE_PRODUCTS));
-        String line;
-        while ((line = reader.readLine()) != null) {
-            String[] data = line.split(",");
-            lastId = Integer.parseInt(data[3]);
-        }
-        return lastId;
     }
 
     public void removeProduct(HashMap<Product, Integer> productsShoppingCart) throws MusicoletException, IOException {
@@ -91,15 +80,33 @@ public class ShoppingCartService {
             for (Map.Entry<Product, Integer> entry : productsShoppingCart.entrySet()) {
                 Product product = entry.getKey();
                 Integer quantity = entry.getValue();
+                //TODO: Imprimir subtotal
                 System.out.printf("%-10s %-20s %-10s %-10s\n", product.getId(), product.getName(), product.getPrice(), quantity);
             }
         }
         System.out.println("-----------------------------------------------------");
     }
 
-    //TODO: Arreglar metodo
-    public void finishAndPay(HashMap<Product, Integer> productsShoppingCart) {
-        ServiceConstants.BILL.detailsProducts(productsShoppingCart);
-        ServiceConstants.BILL.detailsBill();
+    public void finishAndPay(ShoppingCart shoppingCart) {
+        Double total = sumProducts(shoppingCart.getProducts());
+
+        LocalDateTime dateCreation = LocalDateTime.now();
+        LocalDateTime datePayment = LocalDateTime.now();
+        Bill bill = new Bill(shoppingCart.getId(), total, dateCreation, datePayment);
+
+        //SE ENVIA LA FACTURA
+        shoppingCart.setBill(bill);
+        ServiceConstants.BILL_SERVICE.printBIll(shoppingCart, shoppingCart.getProducts(), bill);
+    }
+
+    public double sumProducts(HashMap<Product, Integer> productsShoppingCart) {
+        double total = 0.0;
+        for (Map.Entry<Product, Integer> entry : productsShoppingCart.entrySet()) {
+            Product product = entry.getKey();
+            Integer quantity = entry.getValue();
+            double priceTotalProduct = product.getPrice() * quantity;
+            total += priceTotalProduct;
+        }
+        return total;
     }
 }

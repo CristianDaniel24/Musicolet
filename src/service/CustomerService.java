@@ -105,7 +105,7 @@ public class CustomerService {
                         ServiceConstants.SHOPPING_CART_SERVICE.removeProduct(shoppingCart.getProducts());
                         break;
                     case 3:
-                        ServiceConstants.SHOPPING_CART_SERVICE.finishAndPay(shoppingCart.getProducts());
+                        ServiceConstants.SHOPPING_CART_SERVICE.finishAndPay(shoppingCart);
                         break;
                     case 4:
                         ServiceConstants.SHOPPING_CART_SERVICE.listProduct(shoppingCart.getProducts());
