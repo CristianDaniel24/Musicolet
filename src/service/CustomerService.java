@@ -14,9 +14,6 @@ import java.util.LinkedList;
 
 public class CustomerService {
 
-    public static void listProduct() {
-    }
-
     public void createCustomer(BufferedReader reader) throws IOException {
 
         ServiceConstants.PERSON_SERVICE.createPerson();
@@ -53,14 +50,12 @@ public class CustomerService {
 
     public void menuCustomer(Person person) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-
         boolean exit = false;
         while (!exit) {
             try {
                 System.out.printf("\nWELCOME %s to the menu CUSTOMER!!\n", person.getName());
                 System.out.println("1. Buy product");
-                System.out.println("2. List of products");
-                System.out.println("3. Exit");
+                System.out.println("2. Exit");
                 System.out.println("Enter the option:");
                 int option = Integer.parseInt(reader.readLine());
                 switch (option) {
@@ -68,9 +63,6 @@ public class CustomerService {
                         buyProduct(reader);
                         break;
                     case 2:
-                        listProduct();
-                        break;
-                    case 3:
                         System.out.println("Bye..");
                         exit = true;
                         break;
@@ -105,7 +97,7 @@ public class CustomerService {
                         ServiceConstants.SHOPPING_CART_SERVICE.removeProduct(shoppingCart.getProducts());
                         break;
                     case 3:
-                        ServiceConstants.SHOPPING_CART_SERVICE.finishAndPay(shoppingCart);
+                        ServiceConstants.SHOPPING_CART_SERVICE.finishAndPay(shoppingCart, productList);
                         break;
                     case 4:
                         ServiceConstants.SHOPPING_CART_SERVICE.listProduct(shoppingCart.getProducts());

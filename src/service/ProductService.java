@@ -203,4 +203,6 @@ public class ProductService {
         }
         System.out.println("---------------------------------------------");
     }
+
+    //METODO PARA ACTUALIZAR EL TXT CON EL NUEVO STOCK
 }
