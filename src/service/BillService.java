@@ -4,7 +4,6 @@ import classes.Bill;
 import classes.Product;
 import classes.ShoppingCart;
 
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,11 +19,9 @@ public class BillService {
             Double priceProduct = product.getPrice() * quantity;
             System.out.printf("%-31s $%,-34.2f %-15s $%,-1.2f\n", product.getName(), product.getPrice(), quantity, priceProduct);
         }
-        DateTimeFormatter formatterDateCreation = DateTimeFormatter.ofPattern("MM/dd/yyyy, HH:mm:ss");
-        DateTimeFormatter formatterDatePayment = DateTimeFormatter.ofPattern("MM/dd/yyyy, HH:mm:ss");
 
         System.out.printf("\n%-31s %-51s %-1s\n", "Date Creation:", "Date Payment:", "Total:");
-        System.out.printf("%-31s %-51s $%,-1.2f\n", bill.getDateCreation().format(formatterDateCreation), bill.getDatePayment().format(formatterDatePayment), bill.getTotal());
+        System.out.printf("%tB/%td/%tY %tI:%tM:%tS %-4Tp %tB/%td/%tY %tI:%tM:%tS %-24Tp $%,-1.2f\n", bill.getDateCreation(), bill.getDateCreation(), bill.getDateCreation(), bill.getDateCreation(), bill.getDateCreation(), bill.getDateCreation(), bill.getDateCreation(), bill.getDatePayment(), bill.getDatePayment(), bill.getDatePayment(), bill.getDatePayment(), bill.getDatePayment(), bill.getDatePayment(), bill.getDatePayment(), bill.getTotal());
         System.out.println("-----------------------------------------------------------------------------------------------");
     }
 }

@@ -33,18 +33,20 @@ public class ShoppingCartService {
                 //SI EXISTEN PRODUCTOS CON ESA ID ENTONCES SI HAY EN LA BODEGA
                 if (idInput == products.getId()) {
                     //SE CONSIGUE LA CANTIDAD DE CADA PRODUCTO
-                    Integer productStock = products.getStock();
+                    //TODO: ESTO DE ABAJO SOLUCIONA EL PROBLEMA DEL PRODUCTO NULL A LA HORA DE CONSEGUIR LA CANTIDAD
+                    int quantityProducts = productsShoppingCart.getOrDefault(products, 0);
+
                     //SE PREGUNTA LA CANTIDAD DE PRODUCTOS A EL USUARIO
                     System.out.println("Enter the quantity of products you want buy");
                     int stockInput = Integer.parseInt(ReaderConstants.reader.readLine());
+                    //SE REALIZA LA SUMA DE LOS PRODUCTOS QUE PIDIO EL USUARIO CON LOS DEL SHOPPINGCART
+                    stockInput += quantityProducts;
 
                     //AHORA SE VERIFICA QUE HAYAN LOS SUFICIENTES PRODUCTOS EN LA BODEGA
-                    if (productStock >= stockInput) {
+                    if (products.getStock() >= stockInput) {
                         found = true;
-                        int count = productsShoppingCart.getOrDefault(products, 0);
-
-                        //TODO:COMO PUEDO AGREGAR LOS PRODUCTO QUE DIJO EL USUARIO??
-                        productsShoppingCart.put(products, ++count);
+                        //SE AGREGA LA CANTIDAD DE PRODUCTOS AL SHOPPINGCART
+                        productsShoppingCart.put(products, stockInput);
                         System.out.println("\nThe products were added to the ShoppingCart successfully =)");
                         return;
                     } else {
@@ -54,7 +56,7 @@ public class ShoppingCartService {
                 }
             }
             if (!found) {
-                throw new MusicoletException("The id is invalid");
+                throw new MusicoletException("\nThe id is invalid");
             }
 
         } catch (NumberFormatException e) {
@@ -76,17 +78,18 @@ public class ShoppingCartService {
                 int idInput = Integer.parseInt(ReaderConstants.reader.readLine());
 
                 //SE UTILIZO EL USO DE UN INTERRUPTOR PARA QUE MUESTRE EL MENSAJE DE ID INVALIDA CORRECTAMENTE
-                boolean deleted = false;
+                boolean deletedProduct = false;
                 for (Product product : productsShoppingCart.keySet()) {
                     if (product.getId() == idInput) {
                         productsShoppingCart.remove(product);
-                        System.out.println("\nThe product has been successfully removed");
-                        deleted = true;
+                        deletedProduct = true;
                         break;
                     }
-                    if (deleted) {
-                        System.out.println("\nThe id is invalid");
-                    }
+                }
+                if (deletedProduct) {
+                    System.out.println("\nThe product has been successfully removed =)");
+                } else {
+                    System.out.println("\nThe product you want to delete does not exist or is invalid =(");
                 }
             }
         } catch (NumberFormatException e) {
