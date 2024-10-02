@@ -203,4 +203,12 @@ public class ProductService {
         }
         System.out.println("---------------------------------------------");
     }
+
+    public void writeFinishAndPay(LinkedList<Product> productList) throws IOException {
+        BufferedWriter writer = new BufferedWriter(new FileWriter(FileRoutes.RUTE_PRODUCTS, false));
+        for (Product productStore : productList) {
+            writer.write(productStore + System.lineSeparator());
+        }
+        writer.close();
+    }
 }

@@ -3,13 +3,10 @@ package service;
 import classes.Bill;
 import classes.Product;
 import classes.ShoppingCart;
-import constants.FileRoutes;
 import constants.ReaderConstants;
 import constants.ServiceConstants;
 import exceptions.MusicoletException;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -32,6 +29,7 @@ public class ShoppingCartService {
                 //VALIDA SI EXISTE LA ID DEL PRODUCTO PREGUNTADO
                 //SI EXISTEN PRODUCTOS CON ESA ID ENTONCES SI HAY EN LA BODEGA
                 if (idInput == products.getId()) {
+                    found = true;
                     //SE CONSIGUE LA CANTIDAD DE CADA PRODUCTO
                     //TODO: ESTO DE ABAJO SOLUCIONA EL PROBLEMA DEL PRODUCTO NULL A LA HORA DE CONSEGUIR LA CANTIDAD
                     int quantityProducts = productsShoppingCart.getOrDefault(products, 0);
@@ -44,21 +42,19 @@ public class ShoppingCartService {
 
                     //AHORA SE VERIFICA QUE HAYAN LOS SUFICIENTES PRODUCTOS EN LA BODEGA
                     if (products.getStock() >= stockInput) {
-                        found = true;
                         //SE AGREGA LA CANTIDAD DE PRODUCTOS AL SHOPPINGCART
                         productsShoppingCart.put(products, stockInput);
                         System.out.println("\nThe products were added to the ShoppingCart successfully =)");
-                        return;
+                        break;
                     } else {
                         System.out.println("\nSorry, we don't have that quantity of products requested =(");
-                        return;
+                        break;
                     }
                 }
             }
             if (!found) {
                 throw new MusicoletException("\nThe id is invalid");
             }
-
         } catch (NumberFormatException e) {
             System.out.println("Enter the number, please");
         } catch (IOException e) {
@@ -114,34 +110,39 @@ public class ShoppingCartService {
     }
 
     public void finishAndPay(ShoppingCart shoppingCart, LinkedList<Product> productList) throws IOException {
-        Double total = sumProducts(shoppingCart.getProducts());
+        if (!shoppingCart.getProducts().isEmpty()) {
+            Double total = sumProducts(shoppingCart.getProducts());
 
-        LocalDateTime dateCreation = LocalDateTime.now();
-        LocalDateTime datePayment = LocalDateTime.now();
+            LocalDateTime dateCreation = LocalDateTime.now();
+            LocalDateTime datePayment = LocalDateTime.now();
 
-        Bill bill = new Bill(shoppingCart.getId(), total, dateCreation, datePayment);
+            Bill bill = new Bill(shoppingCart.getId(), total, dateCreation, datePayment);
 
-        shoppingCart.setBill(bill);
-        ServiceConstants.BILL_SERVICE.printBIll(shoppingCart, shoppingCart.getProducts(), bill);
-        //DESPUES DE LA FACTURA SE HACE LA ACTUALIZACION DEL ARCHIVO TXT CON EL NUEVO STOCK
-
-        int amountFile;
-        BufferedWriter writerClear = new BufferedWriter(new FileWriter(FileRoutes.RUTE_PRODUCTS, false));
-
-        BufferedWriter writer = new BufferedWriter(new FileWriter(FileRoutes.RUTE_PRODUCTS, true));
-        for (Product productLinket : productList) {
-            //SE RESTA LA CANTIDAD DE PRODUCTOS DEL SHOPINGCART CON LA CANTIDAD DEL LINKEDLIST
+            shoppingCart.setBill(bill);
+            ServiceConstants.BILL_SERVICE.printBIll(shoppingCart, shoppingCart.getProducts(), bill);
+            //DESPUES DE LA FACTURA SE HACE LA ACTUALIZACION DEL ARCHIVO TXT CON EL NUEVO STOCK
+            int resultRest;
+            //SE ITERAN LOS PRODUCTOS DEL CARRITO
             for (Map.Entry<Product, Integer> entry : shoppingCart.getProducts().entrySet()) {
-                Product stockShopingCart = entry.getKey();
-                //TODO:NO ESTA RESTANDO LOS PRODUCTOS BIEN
-                amountFile = productLinket.getStock() - stockShopingCart.getStock();
-                //ENVIA EL NUEVO STOCK
-                productLinket.setStock(amountFile);
+                Product productShoppingCart = entry.getKey();
+                int quantity = entry.getValue();
+                for (Product productStore : productList) {
+                    //SE BUSCA EL ID DE LOS PRODUCTOS EN LA BODEGA
+                    if (productShoppingCart.getId().equals(productStore.getId())) {
+                        //ACTUALIZAR EL STOCK DE LOS PRODUCTOS DE LA BODEGA
+                        resultRest = productStore.getStock() - quantity;
+                        //SE LE ENVIA EL RESULTADO DE LA RESTA A LA LISTA
+                        productStore.setStock(resultRest);
+                    }
+                }
             }
-            //POR ULTIMO SE ESCRIBE LA INFORMACION ACTUALIZADA EN EL ARCHIVO
-            writer.write(productLinket + System.lineSeparator());
+            //ESCRIBE EN EL ARCHIVO TXT LA NUEVA CANTIDAD ACTUALIZADA
+            ServiceConstants.PRODUCT_SERVICES.writeFinishAndPay(productList);
+            //SE GUARDA LA FACTURA CREADA EN UN ARCHIVO TXT
+            ServiceConstants.BILL_SERVICE.saveBills(shoppingCart, bill);
+        } else {
+            System.out.println("\nThe ShoppingCart is empty =(");
         }
-        writer.close();
     }
 
     public double sumProducts(HashMap<Product, Integer> productsShoppingCart) {
