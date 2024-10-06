@@ -18,6 +18,15 @@ public class ShoppingCartService {
     public ShoppingCartService() {
     }
 
+    /**
+     * Este metodo permite al usuario agregar productos al carrito de compras
+     *
+     * @param productList          Se recibe la lista con los productos
+     * @param productsShoppingCart Se recibe el carrito de compras
+     * @throws MusicoletException    Ocurre cuando hay un error de la aplicacion
+     * @throws NumberFormatException Ocurre cuando el usuario no ingresa un digito cuando es solicitado
+     * @throws IOException           Se usa para capturar errores de lectura
+     */
     public void addProduct(LinkedList<Product> productList, HashMap<Product, Integer> productsShoppingCart) throws MusicoletException {
         try {
             //PREGUNTA LA ID DEL PRODUCTO AL USUARIO
@@ -65,6 +74,13 @@ public class ShoppingCartService {
 
     }
 
+    /**
+     * Este metodo permite al usuario eliminar productos del carrito de compras
+     *
+     * @param productsShoppingCart Se recibe el carrito de compras
+     * @throws IOException           Se usa para capturar errores de lectura
+     * @throws NumberFormatException Ocurre cuando el usuario no ingresa un digito cuando es solicitado
+     */
     public void removeProduct(HashMap<Product, Integer> productsShoppingCart) throws IOException {
         try {
             if (productsShoppingCart.isEmpty()) {
@@ -93,6 +109,11 @@ public class ShoppingCartService {
         }
     }
 
+    /**
+     * Este metodo imprime por pantalla una lista de los productos del carrito de compras
+     *
+     * @param productsShoppingCart Se recibe el carrito de compras
+     */
     public void listProduct(HashMap<Product, Integer> productsShoppingCart) {
         if (productsShoppingCart.isEmpty()) {
             System.out.println("\nThe shoppingCart is empty =(");
@@ -109,6 +130,13 @@ public class ShoppingCartService {
         }
     }
 
+    /**
+     * Este metodo permite al usuario finalizar la compra
+     *
+     * @param shoppingCart Se recibe el carrito de compras
+     * @param productList  Se recibe la lista de los productos de la tienda
+     * @throws IOException Se usa para capturar errores de lectura
+     */
     public void finishAndPay(ShoppingCart shoppingCart, LinkedList<Product> productList) throws IOException {
         if (!shoppingCart.getProducts().isEmpty()) {
             Double total = sumProducts(shoppingCart.getProducts());
@@ -140,11 +168,19 @@ public class ShoppingCartService {
             ServiceConstants.PRODUCT_SERVICES.writeFinishAndPay(productList);
             //SE GUARDA LA FACTURA CREADA EN UN ARCHIVO TXT
             ServiceConstants.BILL_SERVICE.saveBills(shoppingCart, bill);
+            //POR ULTIMO SE LIMPIA EL CARRITO DE COMPRAS
+            shoppingCart.getProducts().clear();
         } else {
             System.out.println("\nThe ShoppingCart is empty =(");
         }
     }
 
+    /**
+     * Este metodo suma el precio de los productos del carrito de compras y retorna el total
+     *
+     * @param productsShoppingCart Se recibe el carrito de compras
+     * @return Retorna la suma de los precios de los productos del carrito de compras
+     */
     public double sumProducts(HashMap<Product, Integer> productsShoppingCart) {
         double total = 0.0;
         for (Map.Entry<Product, Integer> entry : productsShoppingCart.entrySet()) {
