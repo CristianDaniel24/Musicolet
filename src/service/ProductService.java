@@ -173,6 +173,9 @@ public class ProductService {
         }
     }
 
+    public void deletedProduct() {
+    }
+
     /**
      * Este metodo muestra una lista de los productos existentes
      *
@@ -188,13 +191,10 @@ public class ProductService {
         }
     }
 
-<<<<<<< HEAD
     public void listProductDeleted() throws IOException {
 
     }
 
-=======
->>>>>>> 39b0fe96bbdd02b43fef02d3b4ef250880125db4
     /**
      * Este metodo retorna una lista con los productos existentes en el archivo de los Productos
      *
