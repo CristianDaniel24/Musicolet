@@ -173,7 +173,8 @@ public class ProductService {
         }
     }
 
-    public void deletedProduct() {
+    public void deletedProduct() throws IOException {
+
     }
 
     /**
@@ -195,12 +196,26 @@ public class ProductService {
 
     }
 
-    /**
-     * Este metodo retorna una lista con los productos existentes en el archivo de los Productos
-     *
-     * @return Retorna un LinketList con los productos del archivo txt
-     * @throws IOException Se usa para capturar errores de lectura
-     */
+    public int getLastId() throws IOException {
+        int lastId = 0;
+        BufferedReader reader = new BufferedReader(new FileReader(FileRoutes.RUTE_PRODUCTS));
+        String line;
+        while ((line = reader.readLine()) != null) {
+            String[] data = line.split(",");
+            lastId = Integer.parseInt(data[5]);
+        }
+        return lastId;
+    }
+
+    public void details() throws IOException {
+        BufferedReader reader = new BufferedReader(new FileReader(FileRoutes.RUTE_PRODUCTS));
+        String line;
+        System.out.println("The file has:");
+        while ((line = reader.readLine()) != null) {
+            System.out.println(line);
+        }
+    }
+
     public LinkedList<Product> getProducts() throws IOException {
         BufferedReader readerProducts = new BufferedReader(new FileReader(FileRoutes.RUTE_PRODUCTS));
         LinkedList<Product> productList = new LinkedList<>();
