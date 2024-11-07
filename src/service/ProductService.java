@@ -173,10 +173,11 @@ public class ProductService {
         }
     }
 
-    public void deletedProduct() throws IOException {
-
-    }
-
+    /**
+     * Este metodo muestra una lista de los productos existentes
+     *
+     * @throws IOException Se usa para capturar errores de lectura
+     */
     public void listProduct() throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader(FileRoutes.RUTE_PRODUCTS));
         String line;
@@ -187,10 +188,13 @@ public class ProductService {
         }
     }
 
+<<<<<<< HEAD
     public void listProductDeleted() throws IOException {
 
     }
 
+=======
+>>>>>>> 39b0fe96bbdd02b43fef02d3b4ef250880125db4
     /**
      * Este metodo retorna una lista con los productos existentes en el archivo de los Productos
      *
