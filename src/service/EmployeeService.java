@@ -10,10 +10,14 @@ import java.time.LocalDateTime;
 
 public class EmployeeService {
 
+    /**
+     * Este metodo crea un nuevo empleado con la informacion solicitada
+     *
+     * @param reader Se usa para leer datos por pantalla del usuario
+     * @throws IOException Se usa para capturar errores de lectura
+     */
     public void createEmployee(BufferedReader reader) throws IOException {
-
         ServiceConstants.PERSON_SERVICE.createPerson();
-
         int idEmployee = ServiceConstants.PERSON_SERVICE.getLastIdPerson();
 
         String rol = "Employee";
@@ -28,6 +32,12 @@ public class EmployeeService {
         writerEmployee.close();
     }
 
+    /**
+     * Este metodo busca el id del empleado para compararla con las ids de los archivos txt
+     *
+     * @param person Se usa la clase Person para acceder a sus atributos y metodos
+     * @return Retorna true si encuentra la id del empleado si no retorna false
+     */
     public boolean searchIdEmployee(Person person) throws IOException {
         BufferedReader readerFileEmployee = new BufferedReader(new FileReader(FileRoutes.RUTE_EMPLOYEE));
         String lineEmployee;
@@ -45,6 +55,13 @@ public class EmployeeService {
         return yes;
     }
 
+    /**
+     * Este metodo muestra por pantalla el menu del empleado
+     *
+     * @param person Se usa la clase Person para acceder a sus atributos y metodos
+     * @throws NumberFormatException Ocurre cuando el empleado no ingresa un digito cuando es solicitado
+     * @throws IOException           Se usa para capturar errores de lectura
+     */
     public void menuEmployee(Person person) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         boolean exit = false;

@@ -9,14 +9,18 @@ import java.io.*;
 
 public class PersonService {
 
+    /**
+     * Este metodo crea una persona para que desarrolle un rol en el programa
+     *
+     * @return Retorna una objeto de tipo Person
+     * @throws IOException Se usa para capturar errores de lectura
+     */
     public Person createPerson() throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         Person person = new Person();
         boolean inputValid = false;
         while (!inputValid) {
-
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(FileRoutes.RUTE_PERSON, true))) {
-
                 int lastId = ServiceConstants.PERSON_SERVICE.getLastIdPerson();
 
                 System.out.println("\nEnter your name:");
@@ -59,6 +63,12 @@ public class PersonService {
         return person;
     }
 
+    /**
+     * Este metodo recorre las id del el archivo txt y las retorna
+     *
+     * @return Retorna las id de las personas de el archivo txt Person
+     * @throws IOException Se usa para capturar errores de lectura
+     */
     public int getLastIdPerson() throws IOException {
         int lastId = 0;
         BufferedReader reader = new BufferedReader(new FileReader(FileRoutes.RUTE_PERSON));

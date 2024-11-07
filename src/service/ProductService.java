@@ -14,6 +14,14 @@ public class ProductService {
     public ProductService() {
     }
 
+    /**
+     * Este metodo retorna un producto con la informacion faltante de los productos en sus respectivas posiciones
+     *
+     * @param data  Este es un Array que almacena la informacion de los productos
+     * @param name  Es el nombre del producto
+     * @param price Es el precio del producto
+     * @return Retorna un nuevo producto con su informacion correspondiente
+     */
     private static Product getProduct(String[] data, String name, Double price) {
         Integer stock = Integer.parseInt(data[2]);
         Integer id = Integer.parseInt(data[3]);
@@ -31,6 +39,12 @@ public class ProductService {
         return new Product(name, price, stock, id, dateCreation, dateEdition, dateEliminate);
     }
 
+    /**
+     * Este metodo permite al empleado agregar un nuevo producto
+     *
+     * @param reader Se usa para leer informacion por pantalla
+     * @throws IOException Se usa para capturar errores de lectura y escritura
+     */
     public void addProduct(BufferedReader reader) throws IOException {
         BufferedWriter writer = new BufferedWriter(new FileWriter(FileRoutes.RUTE_PRODUCTS, true));
         int lastId = getLastIdProducts();
@@ -55,6 +69,11 @@ public class ProductService {
         detailsProduct();
     }
 
+    /**
+     * Este metodo muesta los detalles de los productos
+     *
+     * @throws IOException Se usa para capturar errores de lectura
+     */
     public void detailsProduct() throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader(FileRoutes.RUTE_PRODUCTS));
         String line;
@@ -64,6 +83,12 @@ public class ProductService {
         }
     }
 
+    /**
+     * Este metodo retorna las id de los productos
+     *
+     * @return Retorna las id de los productos
+     * @throws IOException Se usa para capturar errores de lectura
+     */
     public int getLastIdProducts() throws IOException {
         int lastId = 0;
         BufferedReader reader = new BufferedReader(new FileReader(FileRoutes.RUTE_PRODUCTS));
@@ -75,6 +100,12 @@ public class ProductService {
         return lastId;
     }
 
+    /**
+     * Este metodo permite editar los productos existentes
+     *
+     * @param reader Se usa para leer informacion por pantalla
+     * @throws IOException Se usa para capturar errores de lectura y escritura
+     */
     public void editProduct(BufferedReader reader) throws IOException {
         List<Product> listProducts = new ArrayList<>();
 
@@ -142,10 +173,11 @@ public class ProductService {
         }
     }
 
-    public void deletedProduct() throws IOException {
-
-    }
-
+    /**
+     * Este metodo muestra una lista de los productos existentes
+     *
+     * @throws IOException Se usa para capturar errores de lectura
+     */
     public void listProduct() throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader(FileRoutes.RUTE_PRODUCTS));
         String line;
@@ -156,30 +188,12 @@ public class ProductService {
         }
     }
 
-    public void listProductDeleted() throws IOException {
-
-    }
-
-    public int getLastId() throws IOException {
-        int lastId = 0;
-        BufferedReader reader = new BufferedReader(new FileReader(FileRoutes.RUTE_PRODUCTS));
-        String line;
-        while ((line = reader.readLine()) != null) {
-            String[] data = line.split(",");
-            lastId = Integer.parseInt(data[5]);
-        }
-        return lastId;
-    }
-
-    public void details() throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader(FileRoutes.RUTE_PRODUCTS));
-        String line;
-        System.out.println("The file has:");
-        while ((line = reader.readLine()) != null) {
-            System.out.println(line);
-        }
-    }
-
+    /**
+     * Este metodo retorna una lista con los productos existentes en el archivo de los Productos
+     *
+     * @return Retorna un LinketList con los productos del archivo txt
+     * @throws IOException Se usa para capturar errores de lectura
+     */
     public LinkedList<Product> getProducts() throws IOException {
         BufferedReader readerProducts = new BufferedReader(new FileReader(FileRoutes.RUTE_PRODUCTS));
         LinkedList<Product> productList = new LinkedList<>();
@@ -195,6 +209,11 @@ public class ProductService {
         return productList;
     }
 
+    /**
+     * Este metodo imprime una tabla detallada con la informacion de los productos
+     *
+     * @param productList Recibe la lista con los productos
+     */
     public void printTable(LinkedList<Product> productList) {
         System.out.println("---------------------------------------------");
         System.out.printf("%-15s %-15s %-5s %-10s\n", "Name", "Price", "Id", "stock");
@@ -204,6 +223,12 @@ public class ProductService {
         System.out.println("---------------------------------------------");
     }
 
+    /**
+     * Este metodo escribe en el archivo txt la lista actualizada con la informacion de la factura hecha
+     *
+     * @param productList Se recibe la lista con la informacion actualizada
+     * @throws IOException Se usa para capturar errores de escritura
+     */
     public void writeFinishAndPay(LinkedList<Product> productList) throws IOException {
         BufferedWriter writer = new BufferedWriter(new FileWriter(FileRoutes.RUTE_PRODUCTS, false));
         for (Product productStore : productList) {

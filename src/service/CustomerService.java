@@ -14,10 +14,14 @@ import java.util.LinkedList;
 
 public class CustomerService {
 
+    /**
+     * Este metodo crea cuetas de clientes solicitantoles la informacion necesaria
+     *
+     * @param reader Se usa para leer las entradas por pantalla del usuario
+     * @throws IOException Se usa para capturar errores de lectura
+     */
     public void createCustomer(BufferedReader reader) throws IOException {
-
         ServiceConstants.PERSON_SERVICE.createPerson();
-
         int idCustomer = ServiceConstants.PERSON_SERVICE.getLastIdPerson();
 
         System.out.println("\nEnter your address:");
@@ -31,6 +35,13 @@ public class CustomerService {
         writerCustomer.close();
     }
 
+    /**
+     * Este metodo busca la id del usuario y la compara con las id almacenadas en los archivos txt
+     *
+     * @param person Se recibe la clase Person con sus atributos y metodos
+     * @return yes Este retorno devuelve si se pudo encontrar a la persona o no
+     * @throws IOException Se usa para capturar errores de lectura
+     */
     public boolean searchIdCustomer(Person person) throws IOException {
         BufferedReader readerFileCustomer = new BufferedReader(new FileReader(FileRoutes.RUTE_CUSTOMER));
         String lineCustomer;
@@ -48,6 +59,13 @@ public class CustomerService {
         return yes;
     }
 
+    /**
+     * Este metodo imprime el menu del Usuario por pantalla
+     *
+     * @param person Se recibe la clase Person con sus atributos y metodos
+     * @throws NumberFormatException Se usa por si el usuario no ingresa un digito cuando es solicitado
+     * @throws IOException           Se usa para capturar errores de lectura
+     */
     public void menuCustomer(Person person) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         boolean exit = false;
@@ -75,6 +93,12 @@ public class CustomerService {
         }
     }
 
+    /**
+     * Este metodo imprime por pantalla  el menu al usuario para que ingrese una opcion
+     *
+     * @param reader Se usa para leer entradas del usuario por pantalla
+     * @throws NumberFormatException Ocurre cuando el usuario no ingresa un numero cuando es solicitado
+     */
     public void buyProduct(BufferedReader reader) throws IOException {
         LinkedList<Product> productList = ServiceConstants.PRODUCT_SERVICES.getProducts();
         ServiceConstants.PRODUCT_SERVICES.printTable(productList);
