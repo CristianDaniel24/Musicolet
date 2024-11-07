@@ -66,7 +66,7 @@ public class PersonService {
     /**
      * Este metodo recorre las id del el archivo txt y las retorna
      *
-     * @return Retorna las id de las personas de el archivo txt Person
+     * @return Retorna la id de la persona de el archivo txt Person
      * @throws IOException Se usa para capturar errores de lectura
      */
     public int getLastIdPerson() throws IOException {

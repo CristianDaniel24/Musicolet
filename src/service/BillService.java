@@ -41,7 +41,7 @@ public class BillService {
     /**
      * Este metodo guarda las facturas realizadas en un archivo txt
      *
-     * @param shoppingCart Se recibe la clase ShoppingCart con todos sus atributos y metodos
+     * @param shoppingCart Se recibe el carrito de compras
      * @param bill         Se recibe la clase Bill con informacion faltante de las facturas
      * @throws IOException Ocurre cuando se encuentra un error a la hora de crear un archivo nuevo
      */
